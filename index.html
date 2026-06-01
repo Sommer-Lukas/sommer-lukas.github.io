@@ -50,21 +50,20 @@ h1 em{font-style:italic}
 
 .sec-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;margin-bottom:1.25rem;padding-bottom:.75rem;border-bottom:1px solid var(--border)}
 
-.parallel-badge{display:inline-flex;align-items:center;gap:6px;font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:2px 8px;margin-bottom:1.25rem;letter-spacing:.04em}
-.pdots{display:flex;gap:3px}
-.pdot{width:5px;height:5px;border-radius:50%;background:var(--muted);opacity:.45}
 
 .exp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.875rem}
 @media(max-width:640px){.exp-grid{grid-template-columns:1fr}}
 
-.exp-card{background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:1.25rem;display:flex;flex-direction:column}
-.exp-org{font-size:12px;font-family:'DM Mono',monospace;color:var(--muted);margin-bottom:.75rem;letter-spacing:.03em}
+.exp-card{background:var(--card-bg);border:1px solid var(--border);border-top:2px solid var(--text);border-radius:10px;padding:1.25rem;display:flex;flex-direction:column;position:relative;transition:transform .2s ease,box-shadow .2s ease}
+.exp-card:hover{transform:translateY(-3px);box-shadow:0 14px 36px rgba(0,0,0,.09)}
+[data-theme="dark"] .exp-card:hover{box-shadow:0 14px 36px rgba(0,0,0,.38)}
+.exp-org{font-family:'Fraunces',serif;font-weight:300;font-size:15px;font-style:italic;color:var(--text);padding-bottom:.625rem;margin-bottom:.75rem;border-bottom:1px solid var(--border)}
+.role-title{font-weight:500;font-size:14px;line-height:1.35;margin-bottom:2px}
 .exp-roles{display:flex;flex-direction:column;flex:1}
 .role-item{position:relative;padding-left:14px;padding-bottom:.9rem}
 .role-item:last-child{padding-bottom:0}
 .role-item::before{content:'';position:absolute;left:0;top:7px;width:5px;height:5px;border-radius:50%;background:var(--text);border:1.5px solid var(--card-bg)}
 .role-item:not(:last-child)::after{content:'';position:absolute;left:2px;top:12px;bottom:0;width:.5px;background:var(--border)}
-.role-title{font-weight:500;font-size:13px;line-height:1.35;margin-bottom:2px}
 .role-date{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted)}
 .role-desc{font-size:12px;color:var(--muted);line-height:1.55;margin-top:4px}
 .exp-footer{margin-top:1rem;padding-top:.75rem;border-top:.5px solid var(--border);display:flex;gap:4px;flex-wrap:wrap}
@@ -73,7 +72,9 @@ h1 em{font-style:italic}
 .proj-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.875rem}
 @media(max-width:580px){.proj-grid{grid-template-columns:1fr}}
 
-.card{background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:1.25rem 1.4rem;display:flex;flex-direction:column;overflow:hidden}
+.card{background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:1.25rem 1.4rem;display:flex;flex-direction:column;overflow:hidden;transition:transform .2s ease,box-shadow .2s ease}
+.card:hover{transform:translateY(-3px);box-shadow:0 14px 36px rgba(0,0,0,.09)}
+[data-theme="dark"] .card:hover{box-shadow:0 14px 36px rgba(0,0,0,.38)}
 .card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.5rem;gap:10px}
 .card-title{font-weight:500;font-size:14px;line-height:1.4}
 .card-date{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);white-space:nowrap}
@@ -95,7 +96,8 @@ h1 em{font-style:italic}
 .card-links a.cl-primary:hover{opacity:.85}
 
 .pub-block{background:var(--card-bg);border:1px solid var(--border);border-radius:10px;overflow:hidden}
-.pub-item{padding:1rem 1.4rem;border-bottom:.5px solid var(--border)}
+.pub-item{padding:1rem 1.4rem;border-bottom:.5px solid var(--border);transition:background .15s ease;cursor:default}
+.pub-item:hover{background:var(--surface)}
 .pub-item:last-child{border-bottom:none}
 .pub-title{font-weight:500;font-size:14px;margin-bottom:3px}
 .pub-meta{font-size:13px;color:var(--muted)}
@@ -294,11 +296,6 @@ span[data-l]{display:none}span[data-l].on{display:inline}
 
   <section id="experience">
     <p class="sec-label"><span data-l="en" class="on">Experience</span><span data-l="de">Erfahrung</span></p>
-    <div class="parallel-badge">
-      <div class="pdots"><span class="pdot"></span><span class="pdot"></span><span class="pdot"></span></div>
-      <span data-l="en" class="on">all roles held concurrently since 2022</span>
-      <span data-l="de">alle Rollen gleichzeitig seit 2022</span>
-    </div>
     <div class="exp-grid">
 
       <div class="exp-card">
