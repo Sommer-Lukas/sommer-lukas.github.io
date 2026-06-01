@@ -1,0 +1,433 @@
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;1,9..144,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#FAFAF8;--surface:#F4F3EE;--border:#E2E0D8;--text:#1A1916;--muted:#6B6860;--tag-bg:#EDECEA;--tag-text:#4A4840}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.6}
+
+nav{position:sticky;top:0;z-index:100;background:rgba(250,250,248,0.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:52px}
+.nav-name{font-family:'Fraunces',serif;font-weight:300;font-size:16px}
+.nav-right{display:flex;align-items:center;gap:1.75rem}
+.nav-links{display:flex;gap:1.5rem}
+.nav-links a{font-size:13px;color:var(--muted);text-decoration:none;transition:color .15s}
+.nav-links a:hover{color:var(--text)}
+.lang-toggle{display:flex;gap:4px;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:3px}
+.lang-btn{font-size:11px;font-weight:500;padding:3px 8px;border-radius:4px;border:none;background:transparent;color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s}
+.lang-btn.active{background:#fff;color:var(--text);box-shadow:0 1px 2px rgba(0,0,0,.06)}
+
+main{max-width:960px;margin:0 auto;padding:4rem 2rem 6rem}
+section{margin-bottom:4.5rem}
+
+.hero{margin-bottom:5rem;display:grid;grid-template-columns:1fr auto;gap:3rem;align-items:start}
+@media(max-width:600px){.hero{grid-template-columns:1fr}.avatar-wrap{display:none}}
+.hero-text{}
+
+.hero-label{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;margin-bottom:1.5rem;display:flex;align-items:center;gap:8px}
+.dot{width:7px;height:7px;border-radius:50%;background:#22C55E;position:relative;display:inline-block;flex-shrink:0}
+.dot::after{content:'';display:block;width:7px;height:7px;border-radius:50%;background:#22C55E;opacity:.35;animation:pulse 2s ease-in-out infinite;position:absolute;top:0;left:0;transform:scale(1.9)}
+@keyframes pulse{0%,100%{opacity:.2}50%{opacity:.5}}
+h1{font-family:'Fraunces',serif;font-weight:300;font-size:clamp(1.8rem,3.5vw,2.6rem);line-height:1.15;margin-bottom:1.25rem;letter-spacing:-.01em}
+h1 em{font-style:italic}
+.hero-sub{font-size:14px;color:var(--muted);line-height:1.75;max-width:480px;margin-bottom:1.25rem}
+
+.avatar-wrap{display:flex;flex-direction:column;align-items:center;gap:.75rem;padding-top:.25rem}
+.avatar{width:184px;height:184px;border-radius:14px;border:1px solid var(--border);background:var(--surface);overflow:hidden;display:flex;align-items:center;justify-content:center;position:relative}
+.avatar-meta{text-align:center;display:flex;flex-direction:column;gap:1px}
+.avatar-meta-line{font-size:11px;font-family:'DM Mono',monospace;color:var(--muted);letter-spacing:.03em;line-height:1.65}
+
+.edu-stack{display:flex;flex-direction:column;gap:5px;margin-bottom:2rem}
+.edu-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.edu-pill{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:3px 11px;font-size:11px;font-family:'DM Mono',monospace;color:var(--muted);white-space:nowrap}
+.edu-pill.active{color:var(--text);border-color:#bbb;background:#fff}
+.edu-pill.future{border-style:dashed;opacity:.55}
+.edu-arrow{font-size:11px;color:var(--muted)}
+
+.hero-links{display:flex;gap:.75rem;flex-wrap:wrap}
+.hero-links a{font-size:13px;font-weight:500;color:var(--text);text-decoration:none;border:1px solid var(--border);border-radius:6px;padding:6px 14px;transition:all .15s}
+.hero-links a:hover{background:var(--surface);border-color:#bbb}
+.hero-links a.primary{background:var(--text);color:#fff;border-color:var(--text)}
+.hero-links a.primary:hover{opacity:.85}
+
+.sec-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;margin-bottom:1.25rem;padding-bottom:.75rem;border-bottom:1px solid var(--border)}
+
+.parallel-badge{display:inline-flex;align-items:center;gap:6px;font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:2px 8px;margin-bottom:1.25rem;letter-spacing:.04em}
+.pdots{display:flex;gap:3px}
+.pdot{width:5px;height:5px;border-radius:50%;background:var(--muted);opacity:.45}
+
+.exp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.875rem}
+@media(max-width:640px){.exp-grid{grid-template-columns:1fr}}
+
+.exp-card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:1.25rem;display:flex;flex-direction:column}
+.exp-org{font-size:12px;font-family:'DM Mono',monospace;color:var(--muted);margin-bottom:.75rem;letter-spacing:.03em}
+.exp-roles{display:flex;flex-direction:column;flex:1}
+.role-item{position:relative;padding-left:14px;padding-bottom:.9rem}
+.role-item:last-child{padding-bottom:0}
+.role-item::before{content:'';position:absolute;left:0;top:7px;width:5px;height:5px;border-radius:50%;background:var(--text);border:1.5px solid #fff}
+.role-item:not(:last-child)::after{content:'';position:absolute;left:2px;top:12px;bottom:0;width:.5px;background:var(--border)}
+.role-title{font-weight:500;font-size:13px;line-height:1.35;margin-bottom:2px}
+.role-date{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted)}
+.role-desc{font-size:12px;color:var(--muted);line-height:1.55;margin-top:4px}
+.exp-footer{margin-top:1rem;padding-top:.75rem;border-top:.5px solid var(--border);display:flex;gap:4px;flex-wrap:wrap}
+.etag{font-size:10px;font-family:'DM Mono',monospace;background:var(--tag-bg);color:var(--tag-text);border-radius:3px;padding:1px 6px}
+
+.proj-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.875rem}
+@media(max-width:580px){.proj-grid{grid-template-columns:1fr}}
+
+.card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:1.25rem 1.4rem;display:flex;flex-direction:column;overflow:hidden}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.5rem;gap:10px}
+.card-title{font-weight:500;font-size:14px;line-height:1.4}
+.card-date{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);white-space:nowrap}
+.card-desc{font-size:13px;color:var(--muted);line-height:1.65;margin-bottom:.875rem;flex:1}
+.tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:auto}
+.tag{font-size:10px;font-weight:500;background:var(--tag-bg);color:var(--tag-text);border-radius:3px;padding:2px 6px;font-family:'DM Mono',monospace}
+.tag.blue{background:#DBEAFE;color:#1E40AF}
+.tag.green{background:#DCFCE7;color:#166534}
+
+.card-preview{position:relative;margin:-1.25rem -1.4rem .875rem;flex-shrink:0;height:148px;overflow:hidden}
+.card-preview::after{content:'';position:absolute;bottom:0;left:0;right:0;height:72px;background:linear-gradient(to bottom,transparent,#fff);pointer-events:none;z-index:1}
+.card-preview img{width:100%;height:100%;object-fit:cover;display:block}
+.card-ph{width:100%;height:100%;background:linear-gradient(160deg,#F2F0EA 0%,#E6E2D6 100%)}
+
+.card-links{display:flex;gap:.5rem;margin-top:.875rem;padding-top:.75rem;border-top:.5px solid var(--border);flex-wrap:wrap}
+.card-links a{font-size:11px;font-family:'DM Mono',monospace;color:var(--muted);text-decoration:none;border:1px solid var(--border);border-radius:4px;padding:3px 10px;transition:all .15s}
+.card-links a:hover{color:var(--text);border-color:#bbb}
+.card-links a.cl-primary{background:var(--text);color:#fff;border-color:var(--text)}
+.card-links a.cl-primary:hover{opacity:.85}
+
+.pub-block{background:#fff;border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.pub-item{padding:1rem 1.4rem;border-bottom:.5px solid var(--border)}
+.pub-item:last-child{border-bottom:none}
+.pub-title{font-weight:500;font-size:14px;margin-bottom:3px}
+.pub-meta{font-size:13px;color:var(--muted)}
+.pub-link{font-size:12px;color:#2563EB;text-decoration:none;display:inline-block;margin-top:4px}
+.pub-wip{color:var(--muted);font-style:italic;font-size:13px}
+
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:1.25rem}
+.sg-title{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem}
+.sg-list{font-size:13px;color:var(--text);line-height:2}
+
+footer{border-top:1px solid var(--border);padding:2rem;text-align:center;font-size:12px;color:var(--muted);font-family:'DM Mono',monospace}
+
+[data-l]{display:none}[data-l].on{display:block}
+span[data-l]{display:none}span[data-l].on{display:inline}
+</style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Lukas Sommer",
+  "url": "https://sommer-lukas.github.io",
+  "email": "lukassommer810@gmail.com",
+  "jobTitle": "Dual Trainee · ML Integration & Testing",
+  "description": "Dual CS student at TH Nürnberg Georg Simon Ohm, working on ML integration in the testing department at Nokia. Autonomous systems software engineer and incoming Driverless Head at Strohm & Söhne Formula Student. Tutor for Theoretical Computer Science and Computer Architecture. Focused on machine learning, AI agents, automation, observability, and embedded systems.",
+  "image": "https://sommer-lukas.github.io/Profile-Image_Sommer-Lukas.jpeg",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Nürnberg",
+    "addressCountry": "DE"
+  },
+  "worksFor": [
+    {
+      "@type": "Organization",
+      "name": "Nokia",
+      "url": "https://www.nokia.com"
+    },
+    {
+      "@type": "Organization",
+      "name": "Strohm & Söhne Formula Student",
+      "url": "https://strohmundsoehne.de"
+    }
+  ],
+  "alumniOf": {
+    "@type": "EducationalOrganization",
+    "name": "Technische Hochschule Nürnberg Georg Simon Ohm",
+    "url": "https://www.th-nuernberg.de"
+  },
+  "sameAs": [
+    "https://github.com/Sommer-Lukas",
+    "https://www.linkedin.com/in/sommer-lukas/",
+    "https://www.stateflow.top"
+  ],
+  "knowsAbout": [
+    "Machine Learning", "AI Agents", "Multi-Agent Systems", "RAG",
+    "Autonomous Systems", "Embedded Systems", "Test Automation",
+    "Automata Theory", "Formal Languages", "Computer Architecture",
+    "Observability", "OpenTelemetry", "Prometheus", "Grafana", "Telegraf",
+    "Python", "C", "C++", "TypeScript", "Vue.js", "FastAPI", "Flask",
+    "Docker", "Azure", "ROS2", "SQLite", "PostgreSQL"
+  ],
+  "knowsLanguage": [
+    { "@type": "Language", "name": "German", "alternateName": "de" },
+    { "@type": "Language", "name": "English", "alternateName": "en" }
+  ],
+  "teaches": [
+    {
+      "@type": "Course",
+      "name": "Theoretical Computer Science",
+      "description": "Automata theory, formal languages, context-free grammars, Turing machines, and the pumping lemma.",
+      "provider": { "@type": "EducationalOrganization", "name": "Technische Hochschule Nürnberg Georg Simon Ohm" }
+    },
+    {
+      "@type": "Course",
+      "name": "Computer Architecture",
+      "description": "Processor design, ISA, pipelining, superscalarity, multithreading, cache coherence, and performance evaluation.",
+      "provider": { "@type": "EducationalOrganization", "name": "Technische Hochschule Nürnberg Georg Simon Ohm" }
+    }
+  ],
+  "hasCredential": [
+    {
+      "@type": "EducationalOccupationalCredential",
+      "credentialCategory": "degree",
+      "name": "B.Sc. Informatik",
+      "recognizedBy": { "@type": "EducationalOrganization", "name": "Technische Hochschule Nürnberg Georg Simon Ohm", "url": "https://www.th-nuernberg.de" }
+    },
+    {
+      "@type": "EducationalOccupationalCredential",
+      "credentialCategory": "certificate",
+      "name": "AI Agent Olympics Hackathon — Participation Certificate",
+      "description": "Built OncoBoard.ai during the AI Agent Olympics (Google DeepMind track) at Milan AI Week, hosted by Lablab.ai.",
+      "url": "https://lablab.ai/u/@Sommer-Lukas/ai-hackathons/milan-ai-week-hackathon/certificate",
+      "recognizedBy": { "@type": "Organization", "name": "Lablab.ai" }
+    }
+  ],
+  "workExample": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "Stateflow",
+      "url": "https://www.stateflow.top",
+      "codeRepository": "https://github.com/Sommer-Lukas/ti-tutor",
+      "description": "Visual automata workbench — build, simulate, and test DFA, NFA, PDA, and Turing Machines in the browser.",
+      "applicationCategory": "EducationalApplication"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "ColonySearch",
+      "url": "https://github.com/Sommer-Lukas/ColonySearch",
+      "codeRepository": "https://github.com/Sommer-Lukas/ColonySearch",
+      "description": "Distributed search engine with ant-colony pheromone routing — no central server, no shared index.",
+      "applicationCategory": "WebApplication"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "OncoBoard.ai",
+      "url": "https://onco-board-ai.vercel.app",
+      "codeRepository": "https://github.com/RaneemK-commits/OncoBoard.ai",
+      "description": "Multi-agent clinical decision support — from 8 hours of tumor board prep to 8 minutes.",
+      "applicationCategory": "HealthApplication"
+    }
+  ]
+}
+</script>
+
+<nav>
+  <span class="nav-name">Lukas Sommer</span>
+  <div class="nav-right">
+    <div class="nav-links">
+      <a href="#experience"><span data-l="en" class="on">Experience</span><span data-l="de">Erfahrung</span></a>
+      <a href="#projects"><span data-l="en" class="on">Projects</span><span data-l="de">Projekte</span></a>
+      <a href="#publications"><span data-l="en" class="on">Publications</span><span data-l="de">Publikationen</span></a>
+      <a href="#skills">Skills</a>
+    </div>
+    <div class="lang-toggle">
+      <button class="lang-btn active" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" onclick="setLang('de')">DE</button>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <section class="hero">
+    <div class="hero-text">
+      <p class="hero-label">
+        <span class="dot"></span>
+        <span data-l="en" class="on">Dual Student · Nokia · TH Nürnberg · 2026</span>
+        <span data-l="de">Dualer Student · Nokia · TH Nürnberg · 2026</span>
+      </p>
+      <h1>
+        <span data-l="en" class="on">Lukas Sommer —<br><em>CS Student & Builder</em><br>at Nokia & THN</span>
+        <span data-l="de">Lukas Sommer —<br><em>Informatikstudent & Entwickler</em><br>bei Nokia & THN</span>
+      </h1>
+      <p class="hero-sub">
+        <span data-l="en" class="on">Dual CS student at TH Nürnberg, working on ML integration in testing at Nokia. Autonomous systems software at Formula Student. Focused on machine learning, AI agents, automation, and embedded systems.</span>
+        <span data-l="de">Dualer Informatikstudent an der TH Nürnberg, ML-Integration im Testbereich bei Nokia. Autonomes-System-Software bei Formula Student. Fokus auf Machine Learning, KI-Agenten, Automatisierung und eingebettete Systeme.</span>
+      </p>
+
+      <div class="edu-stack">
+        <div class="edu-row">
+          <span class="edu-pill active">B.Sc. Informatik · TH Nürnberg · 2022–</span>
+          <span class="edu-pill active"><span data-l="en" class="on">Focus: ML · AI Agents</span><span data-l="de">Vertiefung: ML · KI-Agenten</span></span>
+        </div>
+      </div>
+
+      <div class="hero-links">
+        <a href="mailto:lukassommer810@gmail.com" class="primary"><span data-l="en" class="on">Get in touch</span><span data-l="de">Kontakt</span></a>
+        <a href="https://github.com/Sommer-Lukas" target="_blank">GitHub</a>
+        <a href="https://www.linkedin.com/in/sommer-lukas/" target="_blank">LinkedIn</a>
+        <a href="#">CV ↓</a>
+      </div>
+    </div>
+
+    <div class="avatar-wrap">
+      <div class="avatar">
+        <img src="Profile-Image_Sommer-Lukas.jpeg" alt="Lukas Sommer" style="width:100%;height:100%;object-fit:cover;">
+      </div>
+      <div class="avatar-meta">
+        <div class="avatar-meta-line">Nürnberg, Germany</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="experience">
+    <p class="sec-label"><span data-l="en" class="on">Experience</span><span data-l="de">Erfahrung</span></p>
+    <div class="parallel-badge">
+      <div class="pdots"><span class="pdot"></span><span class="pdot"></span><span class="pdot"></span></div>
+      <span data-l="en" class="on">all roles held concurrently since 2022</span>
+      <span data-l="de">alle Rollen gleichzeitig seit 2022</span>
+    </div>
+    <div class="exp-grid">
+
+      <div class="exp-card">
+        <div class="exp-org">Nokia · Nürnberg</div>
+        <div class="exp-roles">
+          <div class="role-item">
+            <div class="role-title"><span data-l="en" class="on">Dual Trainee<br>ML Integration & Testing</span><span data-l="de">Dualer Student<br>ML-Integration & Testing</span></div>
+            <div class="role-date">2022 —</div>
+            <div class="role-desc"><span data-l="en" class="on">Machine learning integration in the testing department. Bridging research and production code — from day one.</span><span data-l="de">Machine-Learning-Integration im Testbereich. Verbindung von Forschung und Produktionscode – von Anfang an.</span></div>
+          </div>
+        </div>
+        <div class="exp-footer"><span class="etag">Python</span><span class="etag">ML</span><span class="etag">Test Automation</span></div>
+      </div>
+
+      <div class="exp-card">
+        <div class="exp-org">Strohm & Söhne · Formula Student</div>
+        <div class="exp-roles">
+          <div class="role-item">
+            <div class="role-title">Driverless Head</div>
+            <div class="role-date"><span data-l="en" class="on">2025 — · ~12 engineers</span><span data-l="de">2025 — · ~12 Ingenieure</span></div>
+            <div class="role-desc"><span data-l="en" class="on">Full system ownership. Coordinating university research collaboration.</span><span data-l="de">Gesamtsystemverantwortung. Koordination Universitätsforschung.</span></div>
+          </div>
+          <div class="role-item">
+            <div class="role-title"><span data-l="en" class="on">Autonomous Systems Software</span><span data-l="de">Autonome-Systeme-Software</span></div>
+            <div class="role-date">2022 – 2025</div>
+            <div class="role-desc"><span data-l="en" class="on">Autonomous system software development with a focus on performance optimization and project management.</span><span data-l="de">Entwicklung autonomer Systemsoftware mit Fokus auf Performanceoptimierung und Projektmanagement.</span></div>
+          </div>
+        </div>
+        <div class="exp-footer"><span class="etag">C++</span><span class="etag">ROS2</span><span class="etag">Performance</span></div>
+      </div>
+
+      <div class="exp-card">
+        <div class="exp-org">TH Nürnberg</div>
+        <div class="exp-roles">
+          <div class="role-item">
+            <div class="role-title"><span data-l="en" class="on">Tutor — Theoretical CS<br>& Computer Architecture</span><span data-l="de">Tutor — Theoretische Informatik<br>& Computerarchitektur</span></div>
+            <div class="role-date">2023 —</div>
+            <div class="role-desc"><span data-l="en" class="on">Automata theory, formal languages, Turing machines, and the pumping lemma. Also processor design, ISA, pipelining, and cache coherence.</span><span data-l="de">Automatentheorie, formale Sprachen, Turingmaschinen und Pumping-Lemma. Außerdem Prozessordesign, ISA, Pipelining und Cache-Kohärenz.</span></div>
+          </div>
+        </div>
+        <div class="exp-footer"><span class="etag">Teaching</span><span class="etag">Theory</span><span class="etag">Architecture</span></div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="projects">
+    <p class="sec-label"><span data-l="en" class="on">Projects</span><span data-l="de">Projekte</span></p>
+    <div class="proj-grid">
+
+      <!-- ColonySearch -->
+      <div class="card">
+        <div class="card-preview"><div class="card-ph"></div></div>
+        <div class="card-top">
+          <span class="card-title">ColonySearch</span>
+          <span class="card-date">2024</span>
+        </div>
+        <p class="card-desc"><span data-l="en" class="on">Distributed search engine with ant-colony pheromone routing — no central server, no shared index. Independent nodes hold local SQLite FTS5 indexes; queries propagate through a NetworkX graph following pheromone trails left by successful past queries. Every routing decision is made locally.</span><span data-l="de">Verteilte Suchmaschine mit Ameisenkolonie-Pheromon-Routing — kein zentraler Server, kein gemeinsamer Index. Unabhängige Knoten halten lokale SQLite-FTS5-Indizes; Anfragen propagieren durch einen NetworkX-Graphen entlang von Pheromonspuren erfolgreicher vergangener Anfragen.</span></p>
+        <div class="tags"><span class="tag blue">Python</span><span class="tag">SQLite FTS5</span><span class="tag">NetworkX</span><span class="tag">Flask</span><span class="tag green">Bionic Computation · THN</span></div>
+        <div class="card-links">
+          <a href="https://github.com/Sommer-Lukas/ColonySearch" target="_blank" class="cl-primary">Repo →</a>
+        </div>
+      </div>
+
+      <!-- Stateflow -->
+      <div class="card">
+        <div class="card-preview"><div class="card-ph"></div></div>
+        <div class="card-top">
+          <span class="card-title">Stateflow</span>
+          <span class="card-date">2024 —</span>
+        </div>
+        <p class="card-desc"><span data-l="en" class="on">Visual automata workbench — build, simulate, and test DFA, NFA, PDA, and Turing Machines in the browser. Interactive canvas editor, step-by-step simulation with PDA stack and TM tape visualization, batch test runner, and a rule-based structural validator. Grew out of tutor materials for Theoretical Informatics.</span><span data-l="de">Visueller Automaten-Arbeitsbereich — DFAs, NFAs, PDAs und Turingmaschinen im Browser erstellen, simulieren und testen. Interaktiver Canvas-Editor, Schrittweise-Simulation mit PDA-Stack und TM-Band, Batch-Testrunner und struktureller Validator.</span></p>
+        <div class="tags"><span class="tag blue">Vue.js</span><span class="tag blue">TypeScript</span><span class="tag">Azure</span><span class="tag">GitHub Actions</span></div>
+        <div class="card-links">
+          <a href="https://www.stateflow.top" target="_blank" class="cl-primary">Live Demo →</a>
+          <a href="https://github.com/Sommer-Lukas/ti-tutor" target="_blank">Repo →</a>
+        </div>
+      </div>
+
+      <!-- OncoBoard.ai -->
+      <div class="card">
+        <div class="card-preview"><div class="card-ph"></div></div>
+        <div class="card-top">
+          <span class="card-title">OncoBoard.ai</span>
+          <span class="card-date">2025</span>
+        </div>
+        <p class="card-desc"><span data-l="en" class="on">Multi-agent clinical decision support — from 8 hours of prep to 8 minutes. A coordinated pipeline of agents handles radiology interpretation, pathology summary, NCCN/ESMO guideline matching, clinical trial search, and past case retrieval. A RAG-backed chat lets clinicians ask plain-language questions grounded in the current patient's data.</span><span data-l="de">Multi-Agenten-System für klinische Entscheidungsunterstützung — von 8 Stunden auf 8 Minuten. Koordinierte Agenten übernehmen Radiologieinterpretation, Pathologiezusammenfassung, Leitlinienabgleich und klinische Studiensuche.</span></p>
+        <div class="tags"><span class="tag blue">Python</span><span class="tag">FastAPI</span><span class="tag blue">Vue.js</span><span class="tag">PostgreSQL</span><span class="tag">Vercel</span><span class="tag green">Hackathon · Lablab.ai</span></div>
+        <div class="card-links">
+          <a href="https://onco-board-ai.vercel.app" target="_blank" class="cl-primary">Live Demo →</a>
+          <a href="https://github.com/RaneemK-commits/OncoBoard.ai" target="_blank">Repo →</a>
+        </div>
+      </div>
+
+      <!-- placeholder -->
+      <div class="card" style="border-style:dashed;opacity:.55">
+        <div class="card-top">
+          <span class="card-title" style="font-style:italic;font-weight:400"><span data-l="en" class="on">Next project — in progress</span><span data-l="de">Nächstes Projekt — in Arbeit</span></span>
+        </div>
+        <p class="card-desc"><span data-l="en" class="on">Add your next project as it develops.</span><span data-l="de">Nächstes Projekt hier ergänzen.</span></p>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="publications">
+    <p class="sec-label"><span data-l="en" class="on">Publications</span><span data-l="de">Publikationen</span></p>
+    <div class="pub-block">
+      <div class="pub-item">
+        <div class="pub-title">Your Paper Title — Specific Descriptive Subtitle</div>
+        <div class="pub-meta"><span data-l="en" class="on">Conference / Journal · 2025</span><span data-l="de">Konferenz / Zeitschrift · 2025</span></div>
+        <a class="pub-link" href="#">arXiv →</a>
+      </div>
+      <div class="pub-item">
+        <div class="pub-wip"><span data-l="en" class="on">More publications will follow as research progresses.</span><span data-l="de">Weitere Publikationen folgen mit dem Forschungsweg.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills">
+    <p class="sec-label">Skills</p>
+    <div class="skills-grid">
+      <div><div class="sg-title"><span data-l="en" class="on">Languages</span><span data-l="de">Sprachen</span></div><div class="sg-list">C · C++<br>Python · Bash</div></div>
+      <div><div class="sg-title">Frontend</div><div class="sg-list">Vue.js<br>TypeScript<br>JavaScript</div></div>
+      <div><div class="sg-title">Backend</div><div class="sg-list">FastAPI<br>Flask</div></div>
+      <div><div class="sg-title">Cloud & Infra</div><div class="sg-list">Docker · Linux<br>Azure · Vercel<br>Git · GitHub</div></div>
+      <div><div class="sg-title">Observability</div><div class="sg-list">OpenTelemetry<br>Prometheus<br>Grafana · Telegraf</div></div>
+      <div><div class="sg-title">Data & AI</div><div class="sg-list">pandas · numpy<br>TensorFlow<br>SQLite · PostgreSQL</div></div>
+      <div><div class="sg-title">Agentic</div><div class="sg-list">Google Gemini<br>Claude AI<br>RAG · MAS</div></div>
+      <div><div class="sg-title"><span data-l="en" class="on">Human Languages</span><span data-l="de">Sprachen</span></div><div class="sg-list"><span data-l="en" class="on">German (native)<br>English (C1)</span><span data-l="de">Deutsch (Muttersprache)<br>Englisch (C1)</span></div></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span data-l="en" class="on">Built with intent, not a template.</span>
+  <span data-l="de">Mit Absicht gebaut, kein Template.</span>
+  &nbsp;·&nbsp;<a href="https://github.com/Sommer-Lukas" style="color:inherit" target="_blank">Source</a>
+</footer>
+
+<script>
+function setLang(l){
+  document.querySelectorAll('[data-l]').forEach(e=>e.classList.toggle('on',e.dataset.l===l));
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent===l.toUpperCase()));
+}
+setLang('en');
+</script>
