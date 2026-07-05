@@ -562,7 +562,15 @@ async function getBotResponse(msg) {
     });
     if (!res.ok) throw new Error('Status ' + res.status);
     const data = await res.json();
-    return data.response || data.reply || data.message || data.text || JSON.stringify(data);
+    let text = data.answer || data.response || data.reply || data.message || data.text;
+    if (text && Array.isArray(data.sources) && data.sources.length) {
+      const links = data.sources
+        .filter(s => s.url)
+        .map(s => '<a href="' + s.url + '" target="_blank" rel="noopener" style="color:#2563EB;text-decoration:underline">' + (s.title || s.url) + '</a>')
+        .join(' &middot; ');
+      if (links) text += '<br><br><span style="font-size:11px;color:var(--muted)">Sources: ' + links + '</span>';
+    }
+    return text || JSON.stringify(data);
   } catch {
     return "Sorry, couldn't reach the backend. Try again in a moment.";
   }
@@ -608,7 +616,8 @@ async function getBotResponse(msg) {
     msg.className='msg msg-'+role;
     const bubble=document.createElement('div');
     bubble.className='msg-content';
-    bubble.textContent=text;
+    if (role==='assistant') {bubble.innerHTML=text}
+    else {bubble.textContent=text}
     msg.appendChild(bubble);
     container.appendChild(msg);
     container.scrollTop=container.scrollHeight;
