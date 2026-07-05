@@ -157,16 +157,28 @@ h1 em{font-style:italic}
 .chat-fab{position:fixed;bottom:1.5rem;right:1.5rem;width:48px;height:48px;border-radius:50%;border:none;background:var(--text);color:#fff;cursor:pointer;z-index:201;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(0,0,0,.14);transition:all .25s ease}
 .chat-fab:hover{transform:scale(1.07);box-shadow:0 6px 28px rgba(0,0,0,.18)}
 .chat-fab svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-[data-theme="dark"] .chat-fab{color:var(--bg)}
-[data-theme="dark"] .chat-fab{box-shadow:0 4px 20px rgba(0,0,0,.4)}
+[data-theme="dark"] .chat-fab{color:var(--bg);box-shadow:0 4px 20px rgba(0,0,0,.4)}
 @media(max-width:640px){
   .chat-panel{width:100%;box-shadow:none}
   .msg{max-width:90%}
+  .chat-suggestions .suggestion{padding:.45rem .85rem;font-size:12px}
+  .chat-input-wrap input{font-size:16px}
+  nav a,.nav-links a{padding:.4rem 0}
+  .hero-links a{padding:.55rem 1rem}
+  .card-links a{padding:.4rem .75rem}
+}
+@media(max-width:480px){
+  main{padding:2.5rem 1.25rem 4rem}
+  .hero{margin-bottom:3rem}
+  .card-preview{height:120px}
+  .skills-grid{grid-template-columns:repeat(2,1fr)}
+  .chat-suggestions{gap:4px}
 }
 @media(max-width:400px){
-  .chat-messages{padding:1rem .875rem .5rem}
-  .chat-input-wrap{padding:.7rem .875rem}
-  .chat-suggestions{padding:0 .875rem .7rem}
+  .chat-messages{padding:1rem .75rem .5rem}
+  .chat-input-wrap{padding:.7rem .75rem}
+  .chat-suggestions{padding:0 .75rem .7rem}
+  .edu-pill{font-size:10px;padding:2px 8px}
 }
 
 footer{border-top:1px solid var(--border);padding:2rem;text-align:center;font-size:12px;color:var(--muted);font-family:'DM Mono',monospace}
@@ -350,7 +362,7 @@ span[data-l]{display:none}span[data-l].on{display:inline}
 
     <div class="avatar-wrap">
       <div class="avatar">
-        <img src="Profile-Image_Sommer-Lukas.jpeg" alt="Lukas Sommer" style="width:100%;height:100%;object-fit:cover;">
+        <img src="Profile-Image_Sommer-Lukas.jpeg" alt="Lukas Sommer" style="width:100%;height:100%;object-fit:cover" loading="lazy">
       </div>
       <div class="avatar-meta">
         <div class="avatar-meta-line"><span data-l="en" class="on">Nuremberg, Germany</span><span data-l="de">Nürnberg, Deutschland</span></div>
@@ -412,7 +424,7 @@ span[data-l]{display:none}span[data-l].on{display:inline}
 
       <!-- ColonySearch -->
       <article class="card">
-        <figure class="card-preview"><img src="ColonySearch-showcase-picture.png" alt="ColonySearch search engine interface showing query input and results with ant-colony routing visualization"></figure>
+        <figure class="card-preview"><img src="ColonySearch-showcase-picture.png" alt="ColonySearch search engine interface showing query input and results with ant-colony routing visualization" loading="lazy"></figure>
         <div class="card-top">
           <h3 class="card-title">ColonySearch</h3>
           <time class="card-date" datetime="2026">2026</time>
@@ -426,7 +438,7 @@ span[data-l]{display:none}span[data-l].on{display:inline}
 
       <!-- Stateflow -->
       <article class="card">
-        <figure class="card-preview"><img src="Stateflow-showcase-picture.png" alt="Stateflow automata workbench editor with DFA/NFA/PDA simulation canvas"></figure>
+        <figure class="card-preview"><img src="Stateflow-showcase-picture.png" alt="Stateflow automata workbench editor with DFA/NFA/PDA simulation canvas" loading="lazy"></figure>
         <div class="card-top">
           <h3 class="card-title">Stateflow</h3>
           <time class="card-date" datetime="2026">2026 —</time>
@@ -441,7 +453,7 @@ span[data-l]{display:none}span[data-l].on{display:inline}
 
       <!-- OncoBoard.ai -->
       <article class="card">
-        <figure class="card-preview"><img src="Oncoboard-showcase-picture.png" alt="OncoBoard.ai multi-agent clinical decision support dashboard"></figure>
+        <figure class="card-preview"><img src="Oncoboard-showcase-picture.png" alt="OncoBoard.ai multi-agent clinical decision support dashboard" loading="lazy"></figure>
         <div class="card-top">
           <h3 class="card-title">OncoBoard.ai</h3>
           <time class="card-date" datetime="2026">2026</time>
@@ -512,7 +524,7 @@ span[data-l]{display:none}span[data-l].on{display:inline}
       <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
   </div>
-  <div class="chat-messages" id="chat-messages"></div>
+  <div class="chat-messages" id="chat-messages" aria-live="polite"></div>
   <div class="chat-suggestions" id="chat-suggestions"></div>
   <div class="chat-input-wrap">
     <input type="text" id="chat-input" placeholder="Ask about my work…" autocomplete="off">
