@@ -605,6 +605,7 @@ async function getBotResponse(msg) {
     panel.classList.toggle('open',isOpen);
     overlay.classList.toggle('open',isOpen);
     fab.style.display=isOpen?'none':'';
+    document.body.style.overflow=isOpen?'hidden':'';
     if(isOpen){
       if(!greeted){greeted=true;addMessage("Hey! Ask me about my projects, experience at Nokia, or what I'm working on.",'assistant')}
       container.scrollTop=container.scrollHeight;
