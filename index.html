@@ -153,6 +153,16 @@ h1 em{font-style:italic}
 .chat-typing span{width:6px;height:6px;border-radius:50%;background:var(--muted);animation:chatPulse 1.2s ease-in-out infinite}
 .chat-typing span:nth-child(2){animation-delay:.2s}
 .chat-typing span:nth-child(3){animation-delay:.4s}
+.pipeline{margin-top:.6rem;border-top:1px solid var(--border);padding-top:.55rem;min-width:210px}
+.pipeline-title{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem}
+.pipeline-steps{display:grid;gap:.4rem}
+.pipeline-row{display:grid;grid-template-columns:10px 1fr auto;align-items:center;gap:.45rem;font-size:12px;color:var(--muted)}
+.pipeline-dot{width:7px;height:7px;border-radius:50%;background:var(--border-mid);opacity:.7}
+.pipeline-row.active .pipeline-dot{background:#22C55E;opacity:1;animation:pulse 2s ease-in-out infinite}
+.pipeline-row.done .pipeline-dot{background:#22C55E;opacity:1}
+.pipeline-row.failed .pipeline-dot{background:#EF4444;opacity:1}
+.pipeline-label{color:var(--text)}
+.pipeline-meta{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);white-space:nowrap}
 @keyframes chatPulse{0%,60%,100%{opacity:.25}30%{opacity:.85}}
 .chat-fab{position:fixed;bottom:1rem;right:1rem;z-index:201;border:none;background:transparent;cursor:pointer;padding:0;width:clamp(52px,10vw,80px);height:auto;line-height:0;transition:transform .25s ease}
 .chat-fab:hover{transform:scale(1.08)}
@@ -569,13 +579,14 @@ function toggleTheme(){
 
 /* --- Chat Widget --- */
 const CHAT_API = 'https://portfolio-rag.lukassommer810.workers.dev/api/chat';
+const CHAT_PROGRESS_API = CHAT_API.replace(/\/chat$/, '/chat/progress');
 
-async function getBotResponse(msg) {
+async function getBotResponse(msg, runId) {
   try {
     const res = await fetch(CHAT_API, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: msg })
+      body: JSON.stringify({ message: msg, runId })
     });
     if (!res.ok) throw new Error('Status ' + res.status);
     const data = await res.json();
@@ -603,6 +614,14 @@ async function getBotResponse(msg) {
   const suggestionsEl=document.getElementById('chat-suggestions');
 
   let isOpen=false;
+  let activeProgress=null;
+  const pipelineSteps=[
+    ['guard','Guard input'],
+    ['rewrite','Rewrite query'],
+    ['retrieve','Retrieve context'],
+    ['generate','Generate answer'],
+    ['critic','Verify answer']
+  ];
 
   function greetingText(){
     const de=document.querySelector('.lang-btn.active')?.textContent==='DE';
@@ -632,6 +651,7 @@ async function getBotResponse(msg) {
     overlay.classList.toggle('open',isOpen);
     fab.style.display=isOpen?'none':'';
     document.body.style.overflow=isOpen?'hidden':'';
+    if(!isOpen&&activeProgress)activeProgress.close();
     if(isOpen){
       ensureGreeting();
       container.scrollTop=container.scrollHeight;
@@ -675,13 +695,39 @@ async function getBotResponse(msg) {
     container.scrollTop=container.scrollHeight;
   }
 
+  function pipelineMeta(step,meta){
+    if(!meta)return '';
+    if(step==='retrieve'&&typeof meta.matchCount==='number')return meta.matchCount+' sources found';
+    if(step==='generate'&&typeof meta.retryCount==='number')return 'retry '+meta.retryCount;
+    if(step==='critic'&&typeof meta.approved==='boolean')return meta.approved?'verification passed':'verification failed';
+    return '';
+  }
+
+  function renderPipeline(state){
+    state.stepsEl.innerHTML='';
+    pipelineSteps.forEach(([key,label])=>{
+      const item=state.steps[key]||{status:'pending',meta:''};
+      const row=document.createElement('div');
+      row.className='pipeline-row '+item.status;
+      row.innerHTML='<span class="pipeline-dot"></span><span class="pipeline-label"></span><span class="pipeline-meta"></span>';
+      row.querySelector('.pipeline-label').textContent=label;
+      row.querySelector('.pipeline-meta').textContent=item.meta||'';
+      state.stepsEl.appendChild(row);
+    });
+  }
+
   function showTyping(){
     const el=document.createElement('div');
     el.className='msg msg-assistant';
     el.id='chat-typing';
-    el.innerHTML='<div class="msg-content"><div class="chat-typing"><span></span><span></span><span></span></div></div>';
+    el.innerHTML='<div class="msg-content"><div class="chat-typing"><span></span><span></span><span></span></div><div class="pipeline"><div class="pipeline-title">Pipeline</div><div class="pipeline-steps"></div></div></div>';
     container.appendChild(el);
     container.scrollTop=container.scrollHeight;
+    const stepsEl=el.querySelector('.pipeline-steps');
+    const state={el,stepsEl,es:null,steps:{}};
+    pipelineSteps.forEach(([key])=>{state.steps[key]={status:'pending',meta:''}});
+    renderPipeline(state);
+    return state;
   }
 
   function hideTyping(){
@@ -689,14 +735,37 @@ async function getBotResponse(msg) {
     if(el)el.remove();
   }
 
+  function openPipeline(runId,state){
+    const es=new EventSource(CHAT_PROGRESS_API+'?runId='+encodeURIComponent(runId));
+    state.es=es;
+    state.close=()=>{if(state.es){state.es.close();state.es=null}if(activeProgress===state)activeProgress=null};
+    es.addEventListener('pipeline',event=>{
+      const data=JSON.parse(event.data);
+      const item=state.steps[data.step];
+      if(!item)return;
+      item.status=data.status==='started'?'active':data.status==='completed'?'done':data.status==='failed'?'failed':'active';
+      item.meta=pipelineMeta(data.step,data.meta);
+      renderPipeline(state);
+      const done=data.status==='failed'||
+        (data.step==='retrieve'&&data.status==='completed'&&data.meta?.final===true)||
+        (data.step==='critic'&&data.status==='completed'&&data.meta?.final===true);
+      if(done)state.close();
+    });
+    es.onerror=()=>state.close();
+    return state;
+  }
+
   async function sendMessage(){
     const text=input.value.trim();
     if(!text)return;
+    const runId=crypto.randomUUID();
     input.value='';
     addMessage(text,'user');
     sendBtn.disabled=true;
-    showTyping();
-    const reply=await getBotResponse(text);
+    const progress=openPipeline(runId,showTyping());
+    activeProgress=progress;
+    const reply=await getBotResponse(text,runId);
+    progress.close();
     hideTyping();
     addMessage(reply,'assistant');
     sendBtn.disabled=false;
