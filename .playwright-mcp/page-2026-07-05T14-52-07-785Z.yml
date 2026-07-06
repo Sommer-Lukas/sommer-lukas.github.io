@@ -1,0 +1,220 @@
+- generic [ref=f1e1]:
+  - navigation [ref=f1e2]:
+    - link "Lukas Sommer" [ref=f1e3] [cursor=pointer]:
+      - /url: "#"
+      - img "LS" [ref=f1e4]
+    - generic [ref=f1e5]:
+      - generic [ref=f1e6]:
+        - link "Experience" [ref=f1e7] [cursor=pointer]:
+          - /url: "#experience"
+        - link "Projects" [ref=f1e8] [cursor=pointer]:
+          - /url: "#projects"
+        - link "Publications" [ref=f1e9] [cursor=pointer]:
+          - /url: "#publications"
+        - link "Chat" [ref=f1e10] [cursor=pointer]:
+          - /url: "#chat"
+        - link "Skills" [ref=f1e11] [cursor=pointer]:
+          - /url: "#skills"
+      - generic [ref=f1e12]:
+        - button "EN" [ref=f1e13] [cursor=pointer]
+        - button "DE" [ref=f1e14] [cursor=pointer]
+      - button "Toggle colour scheme" [ref=f1e15] [cursor=pointer]:
+        - img [ref=f1e16]
+  - main [ref=f1e18]:
+    - generic [ref=f1e19]:
+      - generic [ref=f1e20]:
+        - paragraph [ref=f1e21]:
+          - generic [ref=f1e23]: Dual Student · Nokia · TH Nürnberg · 2026
+        - heading "Lukas Sommer — CS Student & Builder at Nokia & THN" [level=1] [ref=f1e24]:
+          - generic [ref=f1e25]:
+            - text: Lukas Sommer —
+            - emphasis [ref=f1e26]: CS Student & Builder
+            - text: at Nokia & THN
+        - paragraph [ref=f1e27]: Dual CS student at TH Nürnberg, working on ML integration in testing at Nokia. Autonomous systems software at Formula Student. Focused on machine learning, AI agents, automation, and embedded systems.
+        - generic [ref=f1e29]:
+          - generic [ref=f1e30]: B.Sc. Informatik · TH Nürnberg · 2024 –
+          - generic [ref=f1e31]: "Focus: ML · AI Agents"
+        - generic [ref=f1e32]:
+          - link "Get in touch" [ref=f1e33] [cursor=pointer]:
+            - /url: mailto:lukassommer810@gmail.com
+          - link "GitHub" [ref=f1e34] [cursor=pointer]:
+            - /url: https://github.com/Sommer-Lukas
+          - link "LinkedIn" [ref=f1e35] [cursor=pointer]:
+            - /url: https://www.linkedin.com/in/sommer-lukas/
+          - link "CV ↓" [ref=f1e36] [cursor=pointer]:
+            - /url: "#"
+      - generic [ref=f1e37]:
+        - img "Lukas Sommer" [ref=f1e39]
+        - generic [ref=f1e41]: Nürnberg, Germany
+    - generic [ref=f1e42]:
+      - paragraph [ref=f1e43]: Experience
+      - generic [ref=f1e44]:
+        - generic [ref=f1e45]:
+          - generic [ref=f1e46]: Nokia · Nürnberg
+          - generic [ref=f1e48]:
+            - generic [ref=f1e50]:
+              - text: Dual Trainee
+              - text: ML Integration & Testing
+            - generic [ref=f1e51]: 2024 —
+            - generic [ref=f1e52]: Machine learning integration in the testing department. Bridging research and production code — from day one.
+          - generic [ref=f1e53]:
+            - generic [ref=f1e54]: Python
+            - generic [ref=f1e55]: ML
+            - generic [ref=f1e56]: Test Automation
+        - generic [ref=f1e57]:
+          - generic [ref=f1e58]: Strohm & Söhne · Formula Student
+          - generic [ref=f1e59]:
+            - generic [ref=f1e60]:
+              - generic [ref=f1e61]: Driverless Head
+              - generic [ref=f1e62]: 2026 — · ~12 engineers
+              - generic [ref=f1e63]: Full system ownership. Coordinating university research collaboration.
+            - generic [ref=f1e64]:
+              - generic [ref=f1e65]: Autonomous Systems Software
+              - generic [ref=f1e66]: 2025 – 2026
+              - generic [ref=f1e67]: Autonomous system software development with a focus on performance optimization and project management.
+          - generic [ref=f1e68]:
+            - generic [ref=f1e69]: C++
+            - generic [ref=f1e70]: ROS2
+            - generic [ref=f1e71]: Performance
+        - generic [ref=f1e72]:
+          - generic [ref=f1e73]: TH Nürnberg
+          - generic [ref=f1e75]:
+            - generic [ref=f1e77]:
+              - text: Tutor — Theoretical CS
+              - text: "& Computer Architecture"
+            - generic [ref=f1e78]: 2025 —
+            - generic [ref=f1e79]: Automata theory, formal languages, Turing machines, and the pumping lemma. Also processor design, ISA, pipelining, and cache coherence.
+          - generic [ref=f1e80]:
+            - generic [ref=f1e81]: Teaching
+            - generic [ref=f1e82]: Theory
+            - generic [ref=f1e83]: Architecture
+    - generic [ref=f1e84]:
+      - paragraph [ref=f1e85]: Projects
+      - generic [ref=f1e86]:
+        - generic [ref=f1e87]:
+          - img "ColonySearch screenshot" [ref=f1e89]
+          - generic [ref=f1e90]:
+            - generic [ref=f1e91]: ColonySearch
+            - generic [ref=f1e92]: "2026"
+          - paragraph [ref=f1e93]: Distributed search engine with ant-colony pheromone routing — no central server, no shared index. Independent nodes hold local SQLite FTS5 indexes; queries propagate through a NetworkX graph following pheromone trails left by successful past queries. Every routing decision is made locally.
+          - generic [ref=f1e94]:
+            - generic [ref=f1e95]: Python
+            - generic [ref=f1e96]: SQLite FTS5
+            - generic [ref=f1e97]: NetworkX
+            - generic [ref=f1e98]: Flask
+            - generic [ref=f1e99]: Bionic Computation · THN
+          - link "Repo →" [ref=f1e101] [cursor=pointer]:
+            - /url: https://github.com/Sommer-Lukas/ColonySearch
+        - generic [ref=f1e102]:
+          - img "Stateflow screenshot" [ref=f1e104]
+          - generic [ref=f1e105]:
+            - generic [ref=f1e106]: Stateflow
+            - generic [ref=f1e107]: 2026 —
+          - paragraph [ref=f1e108]: Visual automata workbench — build, simulate, and test DFA, NFA, PDA, and Turing Machines in the browser. Interactive canvas editor, step-by-step simulation with PDA stack and TM tape visualization, batch test runner, and a rule-based structural validator. Grew out of tutor materials for Theoretical Informatics.
+          - generic [ref=f1e109]:
+            - generic [ref=f1e110]: Vue.js
+            - generic [ref=f1e111]: TypeScript
+            - generic [ref=f1e112]: Azure
+            - generic [ref=f1e113]: GitHub Actions
+          - generic [ref=f1e114]:
+            - link "Live Demo →" [ref=f1e115] [cursor=pointer]:
+              - /url: https://www.stateflow.top
+            - link "Repo →" [ref=f1e116] [cursor=pointer]:
+              - /url: https://github.com/Sommer-Lukas/ti-tutor
+        - generic [ref=f1e117]:
+          - img "OncoBoard.ai screenshot" [ref=f1e119]
+          - generic [ref=f1e120]:
+            - generic [ref=f1e121]: OncoBoard.ai
+            - generic [ref=f1e122]: "2026"
+          - paragraph [ref=f1e123]: Multi-agent clinical decision support — from 8 hours of prep to 8 minutes. A coordinated pipeline of agents handles radiology interpretation, pathology summary, NCCN/ESMO guideline matching, clinical trial search, and past case retrieval. A RAG-backed chat lets clinicians ask plain-language questions grounded in the current patient's data.
+          - generic [ref=f1e124]:
+            - generic [ref=f1e125]: Python
+            - generic [ref=f1e126]: FastAPI
+            - generic [ref=f1e127]: Vue.js
+            - generic [ref=f1e128]: PostgreSQL
+            - generic [ref=f1e129]: Vercel
+            - generic [ref=f1e130]: Hackathon · Lablab.ai
+          - generic [ref=f1e131]:
+            - link "Live Demo →" [ref=f1e132] [cursor=pointer]:
+              - /url: https://onco-board-ai.vercel.app
+            - link "Repo →" [ref=f1e133] [cursor=pointer]:
+              - /url: https://github.com/RaneemK-commits/OncoBoard.ai
+        - generic [ref=f1e134]:
+          - generic [ref=f1e136]: Next project — in progress
+          - paragraph [ref=f1e137]: Add your next project as it develops.
+    - generic [ref=f1e138]:
+      - paragraph [ref=f1e139]: Chat
+      - generic [ref=f1e140]:
+        - generic [ref=f1e141]:
+          - generic [ref=f1e143]: Hey! Ask me about my projects, experience at Nokia, or what I'm working on.
+          - generic [ref=f1e194]: What projects have you built?
+          - generic [ref=f1e202]: I've built several — ColonySearch (distributed search engine with ant-colony routing), Stateflow (visual automata workbench), and OncoBoard.ai (multi-agent clinical decision support). Which one would you like to know more about?
+        - generic [ref=f1e144]:
+          - button "What projects have you built?" [active] [ref=f1e145] [cursor=pointer]
+          - button "Tell me about Nokia" [ref=f1e146] [cursor=pointer]
+          - button "What are your skills?" [ref=f1e147] [cursor=pointer]
+        - generic [ref=f1e148]:
+          - textbox "Ask about my work…" [ref=f1e149]
+          - button "Send" [ref=f1e150] [cursor=pointer]:
+            - img [ref=f1e151]
+    - generic [ref=f1e154]:
+      - paragraph [ref=f1e155]: Publications
+      - generic [ref=f1e156]:
+        - generic [ref=f1e157]:
+          - generic [ref=f1e158]: Your Paper Title — Specific Descriptive Subtitle
+          - generic [ref=f1e159]: Conference / Journal · 2026
+          - link "arXiv →" [ref=f1e160] [cursor=pointer]:
+            - /url: "#"
+        - generic [ref=f1e162]: More publications will follow as research progresses.
+    - generic [ref=f1e163]:
+      - paragraph [ref=f1e164]: Skills
+      - generic [ref=f1e165]:
+        - generic [ref=f1e166]:
+          - generic [ref=f1e167]: Languages
+          - generic [ref=f1e168]:
+            - text: C · C++
+            - text: Python · Bash
+        - generic [ref=f1e169]:
+          - generic [ref=f1e170]: Frontend
+          - generic [ref=f1e171]:
+            - text: Vue.js
+            - text: TypeScript
+            - text: JavaScript
+        - generic [ref=f1e172]:
+          - generic [ref=f1e173]: Backend
+          - generic [ref=f1e174]:
+            - text: FastAPI
+            - text: Flask
+        - generic [ref=f1e175]:
+          - generic [ref=f1e176]: Cloud & Infra
+          - generic [ref=f1e177]:
+            - text: Docker · Linux
+            - text: Azure · Vercel
+            - text: Git · GitHub
+        - generic [ref=f1e178]:
+          - generic [ref=f1e179]: Observability
+          - generic [ref=f1e180]:
+            - text: OpenTelemetry
+            - text: Prometheus
+            - text: Grafana · Telegraf
+        - generic [ref=f1e181]:
+          - generic [ref=f1e182]: Data & AI
+          - generic [ref=f1e183]:
+            - text: pandas · numpy
+            - text: TensorFlow
+            - text: SQLite · PostgreSQL
+        - generic [ref=f1e184]:
+          - generic [ref=f1e185]: Agentic
+          - generic [ref=f1e186]:
+            - text: Google Gemini
+            - text: Claude AI
+            - text: RAG · MAS
+        - generic [ref=f1e187]:
+          - generic [ref=f1e188]: Human Languages
+          - generic [ref=f1e190]:
+            - text: German (native)
+            - text: English (C1)
+  - contentinfo [ref=f1e191]:
+    - text: Built with intent, not a template. ·
+    - link "Source" [ref=f1e192] [cursor=pointer]:
+      - /url: https://github.com/Sommer-Lukas
