@@ -154,10 +154,11 @@ h1 em{font-style:italic}
 .chat-typing span:nth-child(2){animation-delay:.2s}
 .chat-typing span:nth-child(3){animation-delay:.4s}
 @keyframes chatPulse{0%,60%,100%{opacity:.25}30%{opacity:.85}}
-.chat-fab{position:fixed;bottom:1.5rem;right:1.5rem;width:48px;height:48px;border-radius:50%;border:none;background:var(--text);color:#fff;cursor:pointer;z-index:201;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(0,0,0,.14);transition:all .25s ease}
-.chat-fab:hover{transform:scale(1.07);box-shadow:0 6px 28px rgba(0,0,0,.18)}
-.chat-fab svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-[data-theme="dark"] .chat-fab{color:var(--bg);box-shadow:0 4px 20px rgba(0,0,0,.4)}
+.chat-fab{position:fixed;bottom:1rem;right:1rem;z-index:201;border:none;background:transparent;cursor:pointer;padding:0;transition:transform .25s ease;width:clamp(52px,10vw,80px);height:auto;line-height:0}
+.chat-fab:hover{transform:scale(1.08)}
+.chat-fab:active{transform:scale(.95)}
+.edgar-gif{width:100%;height:auto;display:block;pointer-events:none;image-rendering:auto}
+[data-theme="dark"] .chat-fab{filter:drop-shadow(0 2px 8px rgba(0,0,0,.3))}
 @media(max-width:640px){
   .chat-panel{width:100%;box-shadow:none}
   .msg{max-width:90%}
@@ -166,6 +167,7 @@ h1 em{font-style:italic}
   nav a,.nav-links a{padding:.4rem 0}
   .hero-links a{padding:.55rem 1rem}
   .card-links a{padding:.4rem .75rem}
+  .chat-fab{width:clamp(44px,12vw,60px);bottom:.75rem;right:.75rem}
 }
 @media(max-width:480px){
   main{padding:2.5rem 1.25rem 4rem}
@@ -173,6 +175,7 @@ h1 em{font-style:italic}
   .card-preview{height:120px}
   .skills-grid{grid-template-columns:repeat(2,1fr)}
   .chat-suggestions{gap:4px}
+  .chat-fab{width:clamp(38px,14vw,50px);bottom:.6rem;right:.6rem}
 }
 @media(max-width:400px){
   .chat-messages{padding:1rem .75rem .5rem}
@@ -533,9 +536,8 @@ span[data-l]{display:none}span[data-l].on{display:inline}
     </button>
   </div>
 </div>
-<button class="chat-fab" id="chat-fab" aria-label="Toggle chat">
-  <svg class="fab-open" viewBox="0 0 24 24" style="width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-  <svg class="fab-close" viewBox="0 0 24 24" style="width:20px;height:20px;display:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+<button class="chat-fab" id="chat-fab" aria-label="Chat with Edgar">
+  <img src="Hedgehog_Animated.gif" alt="Edgar the hedgehog" class="edgar-gif">
 </button>
 <script>
 function setLang(l){
@@ -598,7 +600,28 @@ async function getBotResponse(msg) {
   const suggestionsEl=document.getElementById('chat-suggestions');
 
   let isOpen=false;
-  let greeted=false;
+
+  function greetingText(){
+    const de=document.querySelector('.lang-btn.active')?.textContent==='DE';
+    return de
+      ? "Hey, ich bin Edgar \u2014 Lukass Hedgehog-in-Residence. Ich kenne seine Projekte, seine Arbeit bei Nokia, Formula Student und alles, was er baut. Einfach ein Thema nennen."
+      : "Hey, I'm Edgar \u2014 Lukas's hedgehog-in-residence. I've got the full picture on his projects, his work at Nokia, Formula Student, and everything he builds. Plug me in and point me at a topic.";
+  }
+
+  function ensureGreeting(){
+    const existing=container.querySelector('[data-greeting]');
+    if(existing){
+      const text=greetingText();
+      if(existing.querySelector('.msg-content')?.textContent!==text)
+        existing.querySelector('.msg-content').textContent=text;
+      return;
+    }
+    if(!container.children.length){
+      addMessage(greetingText(),'assistant');
+      const last=container.lastElementChild;
+      if(last)last.setAttribute('data-greeting','');
+    }
+  }
 
   function toggleChat(){
     isOpen=!isOpen;
@@ -607,7 +630,7 @@ async function getBotResponse(msg) {
     fab.style.display=isOpen?'none':'';
     document.body.style.overflow=isOpen?'hidden':'';
     if(isOpen){
-      if(!greeted){greeted=true;addMessage("Hey! Ask me about my projects, experience at Nokia, or what I'm working on.",'assistant')}
+      ensureGreeting();
       container.scrollTop=container.scrollHeight;
       setTimeout(()=>input.focus(),300);
     }
