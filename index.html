@@ -63,7 +63,7 @@ h1 em{font-style:italic}
 .exp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.875rem}
 @media(max-width:640px){.exp-grid{grid-template-columns:1fr}}
 
-.exp-card{background:var(--card-bg);border:1px solid var(--border);border-top:2px solid var(--text);border-radius:10px;padding:1.25rem;display:flex;flex-direction:column;position:relative;transition:transform .2s ease,box-shadow .2s ease}
+.exp-card{background:var(--card-bg);border:1px solid var(--border);border-top:2px solid var(--text);border-radius:10px;padding:1.25rem;display:flex;flex-direction:column;position:relative;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
 .exp-card:hover{transform:translateY(-3px);box-shadow:0 14px 36px rgba(0,0,0,.09)}
 [data-theme="dark"] .exp-card:hover{box-shadow:0 14px 36px rgba(0,0,0,.38)}
 .exp-org{font-family:'Fraunces',serif;font-weight:300;font-size:15px;font-style:italic;color:var(--text);padding-bottom:.625rem;margin-bottom:.75rem;border-bottom:1px solid var(--border)}
@@ -81,9 +81,12 @@ h1 em{font-style:italic}
 .proj-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.875rem}
 @media(max-width:580px){.proj-grid{grid-template-columns:1fr}}
 
-.card{background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:1.25rem 1.4rem;display:flex;flex-direction:column;overflow:hidden;transition:transform .2s ease,box-shadow .2s ease}
+.card{background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:1.25rem 1.4rem;display:flex;flex-direction:column;overflow:hidden;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
 .card:hover{transform:translateY(-3px);box-shadow:0 14px 36px rgba(0,0,0,.09)}
 [data-theme="dark"] .card:hover{box-shadow:0 14px 36px rgba(0,0,0,.38)}
+.card.edgar-drop-target,.exp-card.edgar-drop-target{transform:translateY(-2px);box-shadow:0 16px 40px rgba(0,0,0,.12);border-color:var(--border-mid)}
+[data-theme="dark"] .card.edgar-drop-target,[data-theme="dark"] .exp-card.edgar-drop-target{box-shadow:0 16px 40px rgba(0,0,0,.42)}
+.card.edgar-drop-hit,.exp-card.edgar-drop-hit{transform:translateY(-4px) scale(1.01)}
 .card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.5rem;gap:10px}
 .card-title{font-weight:500;font-size:14px;line-height:1.4}
 .card-date{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);white-space:nowrap}
@@ -164,11 +167,13 @@ h1 em{font-style:italic}
 .pipeline-label{color:var(--text)}
 .pipeline-meta{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);white-space:nowrap}
 @keyframes chatPulse{0%,60%,100%{opacity:.25}30%{opacity:.85}}
-.chat-fab{position:fixed;bottom:1rem;right:1rem;z-index:201;border:none;background:transparent;cursor:pointer;padding:0;width:clamp(52px,10vw,80px);height:auto;line-height:0;transition:transform .25s ease}
-.chat-fab:hover{transform:scale(1.08)}
-.chat-fab:active{transform:scale(.95)}
+.chat-fab{position:fixed;bottom:1rem;right:1rem;z-index:201;border:none;background:transparent;cursor:pointer;padding:0;width:clamp(52px,10vw,80px);height:auto;line-height:0;touch-action:none;user-select:none;-webkit-user-drag:none;--drag-x:0px;--drag-y:0px;--fab-scale:1;transform:translate3d(var(--drag-x),var(--drag-y),0) scale(var(--fab-scale));transition:transform .25s ease,filter .2s ease}
+.chat-fab:hover{--fab-scale:1.08}
+.chat-fab:active{--fab-scale:.95}
+.chat-fab.dragging{cursor:grabbing;transition:none;--fab-scale:1.02;filter:drop-shadow(0 10px 22px rgba(0,0,0,.18))}
 .edgar-gif{width:100%;height:auto;display:block;pointer-events:none;image-rendering:auto}
 [data-theme="dark"] .chat-fab{filter:drop-shadow(0 2px 8px rgba(0,0,0,.3))}
+[data-theme="dark"] .chat-fab.dragging{filter:drop-shadow(0 10px 24px rgba(0,0,0,.48))}
 @media(max-width:640px){
   .chat-panel{width:100%;box-shadow:none}
   .msg{max-width:90%}
@@ -549,7 +554,7 @@ span[data-l]{display:none}span[data-l].on{display:inline}
   </div>
 </div>
 <button class="chat-fab" id="chat-fab" aria-label="Chat with Edgar">
-  <img src="Hedgehog_Animated.gif" alt="Edgar the hedgehog" class="edgar-gif">
+  <img src="Hedgehog_Animated.gif" alt="Edgar the hedgehog" class="edgar-gif" draggable="false">
 </button>
 <script>
 function setLang(l){
@@ -606,12 +611,16 @@ async function getBotResponse(msg, runId) {
 
 (function(){
   const fab=document.getElementById('chat-fab');
+  const fabImg=fab.querySelector('.edgar-gif');
   const panel=document.getElementById('chat-panel');
   const overlay=document.getElementById('chat-overlay');
   const container=document.getElementById('chat-messages');
   const input=document.getElementById('chat-input');
   const sendBtn=document.getElementById('chat-send');
   const suggestionsEl=document.getElementById('chat-suggestions');
+
+  const dragState={pointerId:null,startX:0,startY:0,dragging:false,suppressClick:false,target:null};
+  const dragThreshold=4;
 
   let isOpen=false;
   let activeProgress=null;
@@ -658,6 +667,119 @@ async function getBotResponse(msg, runId) {
       setTimeout(()=>input.focus(),300);
     }
   }
+
+  function clearTarget(){
+    if(dragState.target){
+      dragState.target.classList.remove('edgar-drop-target');
+      dragState.target=null;
+    }
+  }
+
+  function visibleText(el){
+    if(!el)return'';
+    const visible=el.querySelector?.('[data-l].on');
+    const text=visible?visible.innerText:el.innerText||el.textContent||'';
+    return text.replace(/\s+/g,' ').trim();
+  }
+
+  function cardPrompt(card){
+    if(card.matches('article.card')){
+      const title=visibleText(card.querySelector('.card-title'));
+      if(!title||/^(Next project|Nächstes Projekt)\b/i.test(title))return'';
+      return "Tell me about Lukas's project "+title+'.';
+    }
+    if(card.matches('article.exp-card')){
+      const org=visibleText(card.querySelector('.exp-org'));
+      const role=visibleText(card.querySelector('.role-title'));
+      if(!org||!role)return'';
+      return "Tell me about Lukas's work experience at "+org+" as "+role+'.';
+    }
+    return'';
+  }
+
+  function setFabOffset(x,y){
+    fab.style.setProperty('--drag-x',x+'px');
+    fab.style.setProperty('--drag-y',y+'px');
+  }
+
+  function setFabMode(isDragging){
+    fab.classList.toggle('dragging',isDragging);
+    fabImg.src=isDragging?'Hedgehog_Animated_struggling.gif':'Hedgehog_Animated.gif';
+  }
+
+  function syncTarget(x,y){
+    const target=document.elementsFromPoint(x,y)
+      .map(el=>el.closest('article.card, article.exp-card'))
+      .find(Boolean);
+    if(target===dragState.target)return;
+    clearTarget();
+    if(target){
+      dragState.target=target;
+      dragState.target.classList.add('edgar-drop-target');
+    }
+  }
+
+  function finishDrag(commit){
+    if(dragState.pointerId===null)return;
+    const dragging=dragState.dragging;
+    const pointerId=dragState.pointerId;
+    const hitTarget=dragState.target;
+    dragState.pointerId=null;
+    if(fab.hasPointerCapture(pointerId)){
+      fab.releasePointerCapture(pointerId);
+    }
+    dragState.dragging=false;
+    setFabMode(false);
+    setFabOffset(0,0);
+    if(dragging&&commit&&hitTarget){
+      hitTarget.classList.add('edgar-drop-hit');
+      setTimeout(()=>hitTarget.classList.remove('edgar-drop-hit'),180);
+      const prompt=cardPrompt(hitTarget);
+      if(prompt){
+        if(!isOpen)toggleChat();
+        input.value=prompt;
+        sendMessage();
+      }
+    }
+    clearTarget();
+    if(dragging){
+      dragState.suppressClick=true;
+      setTimeout(()=>{dragState.suppressClick=false},350);
+    }
+  }
+
+  fab.addEventListener('pointerdown',e=>{
+    if(e.button!==0||dragState.pointerId!==null)return;
+    dragState.pointerId=e.pointerId;
+    dragState.startX=e.clientX;
+    dragState.startY=e.clientY;
+    dragState.dragging=false;
+    dragState.target=null;
+    fab.setPointerCapture(e.pointerId);
+  });
+
+  fab.addEventListener('pointermove',e=>{
+    if(e.pointerId!==dragState.pointerId)return;
+    const dx=e.clientX-dragState.startX;
+    const dy=e.clientY-dragState.startY;
+    if(!dragState.dragging&&Math.hypot(dx,dy)<dragThreshold)return;
+    if(!dragState.dragging){
+      dragState.dragging=true;
+      setFabMode(true);
+    }
+    setFabOffset(dx,dy);
+    syncTarget(e.clientX,e.clientY);
+  });
+
+  fab.addEventListener('pointerup',e=>{if(e.pointerId===dragState.pointerId)finishDrag(true)});
+  fab.addEventListener('pointercancel',e=>{if(e.pointerId===dragState.pointerId)finishDrag(false)});
+  fab.addEventListener('lostpointercapture',e=>{if(e.pointerId===dragState.pointerId)finishDrag(false)});
+  fab.addEventListener('click',e=>{
+    if(!dragState.suppressClick)return;
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    dragState.suppressClick=false;
+  });
 
   fab.addEventListener('click',toggleChat);
   document.getElementById('chat-header-close').addEventListener('click',()=>{if(isOpen)toggleChat()});
